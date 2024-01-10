@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+       
+        body {
+            /*css reset*/
+            padding: 0;
+            margin: 0;
+            background-color: rgba(54, 53, 53, 0.917);
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            padding-bottom: 15px;
+        }
+
+        #te {
+            width: 50vw;
+            height: 10vh;
+            font-size: 3vh;
+            font-style: oblique;
+            border: 3px solid goldenrod;
+            outline: none;
+            max-width: 80vw;
+        }
+        #te::-webkit-resizer{
+            background-color: red;
+
+        }
+        .text {
+            display: block;
+            width: 50vw;
+            word-wrap: break-word;
+            padding: 0;
+            margin: 0;
+            position: relative;
+            top: 10px;
+        }
+
+        .points {
+            background-color: rgb(192, 179, 179);
+            width: 60vw;
+            padding-left: 0.3rem;
+            border-radius: 20px;
+            margin-top: 20px;
+            font-size: 2rem;
+            display: flex;
+            justify-content: flex-start;
+            gap: 20px;
+        }
+
+        .cross {
+            font-size: 1em;
+            /* margin-right: 20px;*/
+            color: red;
+            font-weight: bolder;
+            cursor: pointer;
+            z-index: 1;
+            padding-top: 5px;
+            padding-left: 5px;
+            text-shadow: 2px 2px 2px white;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+
+        }
+
+        #box {
+            background: linear-gradient(135deg, red, rgb(255, 98, 0), rgb(255, 123, 0));
+            animation: grad 10s ease infinite;
+            background-repeat: no-repeat;
+            background-size: 180% 180%;
+            min-height: 80vh;
+            max-height: max-content;
+            width: 80vw;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        @keyframes grad {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .dis {
+            display: none;
+        }
+
+        form {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 20px;
+            flex-direction: column;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            text-align: center;
+            background-color: black;
+            color: white;
+            width: 100vw;
+            margin-bottom: 18px;
+            padding-bottom: 10px;
+            z-index: 3;
+        }
+
+        h1 {
+            padding: 0;
+            margin-top: 0;
+        }
+
+        #sub{
+            padding: 4px 25px;
+            font-size: 20px;
+            border-radius: 5px;
+            outline: none;
+            background:linear-gradient(150deg,green,white,rgb(166, 255, 0));
+        }
+        @media (max-width:400px) {
+            .points{
+                flex-direction: column;
+                align-items: flex-start;
+                gap:3px;
+                   width: 80vw;
+            }
+            .text{
+                margin-top: 0;
+                width: 80vw;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>TO DO LIST...</h1>
+        <form>
+            <textarea name="textarea" id="te" placeholder="Write here..."></textarea>
+            <button id="sub">Submit</button>
+        </form>
+
+    </header>
+    <div id="box">
+
+    </div>
+
+
+
+    <script>
+        let inp = document.querySelector("#te");
+        let box = document.querySelector("#box");
+        let cross = document.getElementsByClassName("cross");
+        /*function addElement(e) {
+            if (e.key == "Enter" && inp.textContent != "") {
+                box.insertAdjacentHTML('beforeend', '<div class="points">' + '<div class="cross">X</div>' + '<p  class="text">' + inp.value + '<p>' + '</div>');
+                localStorage.setItem("BoxData", box.innerHTML);
+
+                inp.value = "";
+                document.getElementById("te").style.width="50vw";
+                document.getElementById("te").style.height="10vh";
+            }
+        }*/
+        function addSubElement(e) {
+            if (inp.value!== "") {
+                box.insertAdjacentHTML('beforeend', '<div class="points">' + '<div class="cross">X</div>' + '<p  class="text">' + inp.value + '<p>' + '</div>');
+                localStorage.setItem("BoxData", box.innerHTML);
+
+                inp.value = "";
+                document.getElementById("te").style.width="50vw";
+                document.getElementById("te").style.height="10vh";
+            }
+        }
+        function removeElement(event) {
+            if (event.target.classList.contains("cross")) { /*e.target refers to the DOM (Document Object Model) element that triggered the event.So e.target.parentElement is used.*/
+
+                // Remove the clicked point and update localStorage
+                event.target.parentElement.remove();
+                localStorage.setItem("BoxData", box.innerHTML);
+            }
+        };
+        document.getElementById("sub").addEventListener("click",(event)=>{
+            event.preventDefault();
+            addSubElement(event);
+        })
+       /* document.addEventListener("keydown", (event) => {
+           // addElement(event);
+           let cross = document.getElementsByClassName("cross");
+            /*Array.from(cross).forEach((e) => {
+                e.addEventListener("click", (element) => {
+                    localStorage.removeItem("BoxData");
+                    e.parentElement.remove();
+                })
+            })/*
+        })*/
+
+        window.addEventListener("load", () => {
+
+            box.addEventListener("click", (event) => {
+                removeElement(event);
+            });
+
+            let savedItem = localStorage.getItem("BoxData") || "";
+
+            box.innerHTML = savedItem;
+        })
+        //------------------------------------------------------------\\
+
+    </script>
+</body>
+
+</html>
